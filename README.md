@@ -113,3 +113,31 @@ I'm trying to solve the challenges of overthewire.org.
 3. cheange loggedin to `1` and refresh.
 
         Access granted. The password for natas6 is 0RoJwHdSKWFTYR5WuiAewauSuNaBXned
+
+## natas7 http://natas7.natas.labs.overthewire.org/
+
+- By clicking on `View sourcecode` a PHP script is shown
+
+        <?
+        include "includes/secret.inc";
+
+        if(array_key_exists("submit", $_POST)) {
+                if($secret == $_POST['secret']) {
+                print "Access granted. The password for natas7 is <censored>";
+            } else {
+                print "Wrong secret";
+            }
+        }
+        ?>
+
+1. This code tells the ‍`$_POST['secret']` parameter to be checked against the `$secret` variable, and `$secret` itself is located in the `includes/secret.inc` file.
+
+   just open `http://natas6.natas.labs.overthewire.org/includes/secret.inc`
+
+        <?
+        $secret = "FOEIUWGHFEEUHOFUOIU";
+        ?>
+
+2. now submit form with Input secret: `FOEIUWGHFEEUHOFUOIU`
+
+        Access granted. The password for natas7 is bmg8SvU1LizuWjx3y7xkNERkHxGre0GS
