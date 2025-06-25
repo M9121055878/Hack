@@ -51,8 +51,12 @@ in : http://natas2.natas.labs.overthewire.org/
         <img src="files/pixel.png">
 
 3. So we have a path named `files/` and access to that path is not blocked.
+
+        http://natas2.natas.labs.overthewire.org/files/
         
     in this path you can find : `users.txt`
+
+    `http://natas2.natas.labs.overthewire.org/files/users.txt`
 
         # username:password
         alice:BYNdCesZqW
